@@ -58,7 +58,8 @@
   }
 
   textarea {
-    width: 40%;
+    width: 100%;
+    max-width: 30rem;
     height: 50vh;
     border: 0;
     border-top: 1px solid black;
