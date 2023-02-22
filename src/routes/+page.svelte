@@ -82,9 +82,12 @@
   }
 </style>
 
-<!-- <svelte:head>
-  <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400;700&display=swap" rel="stylesheet"/>
-</svelte:head> -->
+<svelte:head>
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400;700&display=swap" rel="stylesheet"/> -->
+  <title>
+    griftext: Journaling Tool
+  </title>
+</svelte:head>
 
 <h1>
   griftext
