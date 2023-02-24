@@ -6,7 +6,7 @@
   let filename = (new Date()).toISOString().split('T')[0]
 
   function save() {
-    var file = new Blob([text], {type: 'txt'});
+    var file = new Blob([text], {type: 'md'});
     var a = document.createElement("a"), url = URL.createObjectURL(file);
     a.href = url;
     a.download = filename;
