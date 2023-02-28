@@ -6,7 +6,7 @@
   let filename = (new Date()).toISOString().split('T')[0]
 
   function save() {
-    var file = new Blob([text], {type: 'md'});
+    var file = new Blob([text], { type: 'md' });
     var a = document.createElement("a"), url = URL.createObjectURL(file);
     a.href = url;
     a.download = filename;
@@ -37,7 +37,7 @@
 <style>
   :global(body) {
     text-align: center;
-    font-family: 'Anonymous Pro', monospace;
+    font-family: 'Courier Prime', monospace;
   }
 
   .view-switch {
@@ -66,7 +66,8 @@
     padding-top: 1rem;
     resize: none;
     outline: none;
-    font-family: monospace;
+    font-family: 'Courier Prime', monospace;
+    font-size: 1rem;
   }
 
   .rendered-output {
@@ -84,6 +85,9 @@
 
 <svelte:head>
   <!-- <link href="https://fonts.googleapis.com/css2?family=Anonymous+Pro:wght@400;700&display=swap" rel="stylesheet"/> -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
   <title>
     griftext: Journaling Tool
   </title>
