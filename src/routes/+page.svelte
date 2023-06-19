@@ -21,13 +21,14 @@
   function clear() {
     text = ''
     localStorage.setItem('saved-text', '')
+    filename = (new Date()).toISOString().split('T')[0]
   }
 
   function tempSave() {
     localStorage.setItem('saved-text', text);
   }
 
-  const interval = setInterval(tempSave, 6000)
+  const interval = setInterval(tempSave, 3000)
   onDestroy(() => {
     clearInterval(interval);
   })
@@ -57,13 +58,19 @@
     border: 1px solid black;
   }
 
-  textarea {
+  .contents {
     width: 100%;
+    margin: 0 auto;
     max-width: 30rem;
     height: 50vh;
+    padding-top: 1rem;
+  }
+
+  textarea {
+    width: 100%;
+    height: 100%;
     border: 0;
     border-top: 1px solid black;
-    padding-top: 1rem;
     resize: none;
     outline: none;
     font-family: 'Courier Prime', monospace;
@@ -71,7 +78,7 @@
   }
 
   .rendered-output {
-    width: 50%;
+    text-align: left;
   }
 
   .footer {
@@ -107,6 +114,7 @@
   <input bind:value={filename} />
 </div>
 
+<div class="contents">
 {#if view === 'edit'}
   <textarea bind:value={text} placeholder="Write words here..."/>
 {:else}
@@ -114,6 +122,7 @@
     {@html marked(text)}
   </div>
 {/if}
+</div>
 
 <div class="save">
   <button on:click={save}> Save </button>
