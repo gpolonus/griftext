@@ -1,9 +1,11 @@
 <script lang='ts'>
   import { onDestroy } from 'svelte';
   import { marked } from 'marked';
+  import count from 'word-count';
+
   let text = localStorage.getItem('saved-text') || '';
   let view: 'edit' | 'view' = 'edit';
-  let filename = (new Date()).toISOString().split('T')[0]
+  let filename = localStorage.getItem('saved-title') || (new Date()).toISOString().split('T')[0]
 
   function save() {
     var file = new Blob([text], { type: 'md' });
@@ -21,11 +23,18 @@
   function clear() {
     text = ''
     localStorage.setItem('saved-text', '')
+
     filename = (new Date()).toISOString().split('T')[0]
+    localStorage.setItem('saved-title', filename);
+  }
+
+  function countWords() {
+    alert(`You've written ${count(text)} words.`);
   }
 
   function tempSave() {
     localStorage.setItem('saved-text', text);
+    localStorage.setItem('saved-title', filename);
   }
 
   const interval = setInterval(tempSave, 3000)
@@ -128,6 +137,7 @@
 <div class="save">
   <button on:click={save}> Save </button>
   <button on:click={clear}> Clear </button>
+  <button on:click={countWords}> Count </button>
 </div>
 
 <div class="footer">
