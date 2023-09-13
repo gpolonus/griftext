@@ -64,6 +64,7 @@
     max-width: 30rem;
     height: 50vh;
     padding-top: 1rem;
+    padding-bottom: 1.5rem;
   }
 
   textarea {
