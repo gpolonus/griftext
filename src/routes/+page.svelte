@@ -5,26 +5,29 @@
 
   let text = localStorage.getItem('saved-text') || '';
   let view: 'edit' | 'view' = 'edit';
-  let filename = localStorage.getItem('saved-title') || (new Date()).toISOString().split('T')[0]
+  let filename = localStorage.getItem('saved-title') || ''
 
   function save() {
     var file = new Blob([text], { type: 'md' });
     var a = document.createElement("a"), url = URL.createObjectURL(file);
     a.href = url;
-    a.download = filename;
+    a.download = (new Date()).toISOString().split('T')[0] + '_' + filename;
     document.body.appendChild(a);
     a.click();
+
     setTimeout(function() {
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
     }, 0);
+
+    clear();
   }
 
   function clear() {
     text = ''
     localStorage.setItem('saved-text', '')
 
-    filename = (new Date()).toISOString().split('T')[0]
+    filename = ''
     localStorage.setItem('saved-title', filename);
   }
 
@@ -121,7 +124,7 @@
 </div>
 
 <div class="filename">
-  <input bind:value={filename} />
+  <input bind:value={filename} placeholder="Untitled" />
 </div>
 
 <div class="contents">
