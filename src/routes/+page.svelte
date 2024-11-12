@@ -3,6 +3,9 @@
   import { marked } from 'marked';
   import count from 'word-count';
 
+  let dialogEl;
+  let file;
+
   let text = localStorage.getItem('saved-text') || '';
   let view: 'edit' | 'view' = 'edit';
   let filename = localStorage.getItem('saved-title') || ''
@@ -33,6 +36,31 @@
 
   function countWords() {
     alert(`You've written ${count(text)} words.`);
+  }
+
+  function openFileModal() {
+    dialogEl.showModal()
+  }
+
+  function openFile() {
+    console.log(file)
+    const openedFile = file[0]
+    const reader = new FileReader();
+    reader.readAsText(openedFile, 'UTF-8');
+    reader.onload = (e) => {
+      text = e.target?.result || ''
+      const currentFileNameMatch = /\d{4}-\d{2}-\d{2}_(.*)\.txt/i.exec(openedFile.name)
+      console.log(currentFileNameMatch, openedFile.name)
+      if (currentFileNameMatch && currentFileNameMatch[1]) {
+        filename = currentFileNameMatch[1]
+      }
+
+      clearModal()
+    }
+  }
+
+  function clearModal() {
+    dialogEl.close()
   }
 
   function tempSave() {
@@ -101,6 +129,31 @@
     text-align: left;
     font-size: 0.75rem;
   }
+
+  dialog {
+    padding: 2rem;
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+  }
+
+  dialog::backdrop {
+    background-color: rgba(aquamarine, 0.5);
+  }
+
+  dialog h1 {
+    text-transform: capitalize;
+  }
+
+  dialog div {
+    margin-bottom: 1rem;
+  }
+
+  dialog input {
+    padding: 5px;
+    border: 1px solid black;
+    cursor: pointer;
+  }
+
 </style>
 
 <svelte:head>
@@ -141,7 +194,23 @@
   <button on:click={save}> Save </button>
   <button on:click={clear}> Clear </button>
   <button on:click={countWords}> Count </button>
+  <button on:click={openFileModal}> Open </button>
 </div>
+
+
+<dialog bind:this={dialogEl}>
+  <h1>Open File</h1>
+  <div>
+    <label for="textFile">Choose a file to open:</label>
+  </div>
+  <div>
+    <input bind:files={file} type="file" id="textFile" name="textFile" accept="text/plain" />
+  </div>
+  <div>
+    <button on:click={openFile} disabled='{file ? file.length === 0 : true}'>Open</button>
+    <button on:click={clearModal}>Close</button>
+  </div>
+</dialog>
 
 <div class="footer">
   <a href="https://grifstuf.com">grifstuf</a>
