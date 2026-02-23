@@ -1,4 +1,4 @@
-<script lang='ts'>
+<script>
   import { onDestroy } from 'svelte';
   import { marked } from 'marked';
   import count from 'word-count';
@@ -6,15 +6,26 @@
   let dialogEl;
   let file;
 
-  let text = localStorage.getItem('saved-text') || '';
-  let view: 'edit' | 'view' = 'edit';
-  let filename = localStorage.getItem('saved-title') || ''
+  let text = $state(localStorage.getItem('saved-text') || '')
+  let view = $state('edit')
+  let filename = $state(localStorage.getItem('saved-title') || '')
+
+  $effect(() => {
+    if (filename) {
+      console.log(filename.split(' '))
+      filename = filename.split(' ').map(word => word && `${word[0].toUpperCase()}${word.substring(1)}`).join(' ')
+    }
+  })
+
+  function getDate() {
+    return (new Date()).toISOString().split('T')[0]
+  }
 
   function save() {
     var file = new Blob([text], { type: 'md' });
     var a = document.createElement("a"), url = URL.createObjectURL(file);
     a.href = url;
-    a.download = (new Date()).toISOString().split('T')[0] + '_' + filename;
+    a.download = localStorage.getItem('saved-edit-date') + '_' + filename;
     document.body.appendChild(a);
     a.click();
 
@@ -43,7 +54,6 @@
   }
 
   function openFile() {
-    console.log(file)
     const openedFile = file[0]
     const reader = new FileReader();
     reader.readAsText(openedFile, 'UTF-8');
@@ -64,6 +74,9 @@
   }
 
   function tempSave() {
+    if (localStorage.getItem('saved-text') !== text) {
+      localStorage.setItem('saved-edit-date', getDate());
+    }
     localStorage.setItem('saved-text', text);
     localStorage.setItem('saved-title', filename);
   }
@@ -171,7 +184,7 @@
 </h1>
 
 <div class="view-switch">
-  <button on:click={() => view = view === 'edit' ? 'view' : 'edit'}>
+  <button onclick={() => view = view === 'edit' ? 'view' : 'edit'}>
     {#if view === 'edit'}View{:else}Edit{/if}
   </button>
 </div>
@@ -191,10 +204,10 @@
 </div>
 
 <div class="save">
-  <button on:click={save}> Save </button>
-  <button on:click={clear}> Clear </button>
-  <button on:click={countWords}> Count </button>
-  <button on:click={openFileModal}> Open </button>
+  <button onclick={save}> Save </button>
+  <button onclick={clear}> Clear </button>
+  <button onclick={countWords}> Count </button>
+  <button onclick={openFileModal}> Open </button>
 </div>
 
 
@@ -207,8 +220,8 @@
     <input bind:files={file} type="file" id="textFile" name="textFile" accept="text/plain" />
   </div>
   <div>
-    <button on:click={openFile} disabled='{file ? file.length === 0 : true}'>Open</button>
-    <button on:click={clearModal}>Close</button>
+    <button onclick={openFile} disabled='{file ? file.length === 0 : true}'>Open</button>
+    <button onclick={clearModal}>Close</button>
   </div>
 </dialog>
 
